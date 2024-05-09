@@ -31,7 +31,7 @@ export class UserController {
         const { id } = req.user;
 
         try {
-            const user = await prisma.user.findUnique({ where: { id: Number(id) } });
+            const user = await prisma.user.findUnique({ where: { id: Number(id) }, include: {event: true} });
 
             if (!user) {
                 return res.status(400).json({ error: true, message: "User not found." })
