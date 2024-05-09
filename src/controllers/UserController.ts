@@ -28,7 +28,7 @@ export class UserController {
     }
 
     async read(req: Request, res: Response) {
-        const { id } = req.params;
+        const { id } = req.user;
 
         try {
             const user = await prisma.user.findUnique({ where: { id: Number(id) } });
@@ -45,7 +45,7 @@ export class UserController {
 
     async update(req: Request, res: Response) {
         const { name } = req.body;
-        const { id } = req.params;
+        const { id } = req.user;
 
 
         try {
@@ -57,7 +57,7 @@ export class UserController {
     }
 
     async delete(req: Request, res: Response) {
-        const { id } = req.params;
+        const { id } = req.user;
 
         try {
             await prisma.user.delete({ where: { id: Number(id) } });
