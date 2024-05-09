@@ -1,17 +1,20 @@
-import { Request, Response } from "express";
-import { prisma } from "../database/prisma";
 import { hash } from "bcryptjs";
+import { prisma } from "../database/prisma";
+import { Request, Response } from "express";
+import { UserRepository } from "../repositories/UserRepository";
 
 export class UserController {
     async create(req: Request, res: Response) {
         const { name, email, password } = req.body;
+
+        const userRepository = new UserRepository()
 
         if (!name || !email || !password) {
             return res.status(401).json({ error: true, message: "name, email and password is required" });
         }
 
         try {
-            const userExists = await prisma.user.findUnique({ where: { email } });
+            const userExists = await userRepository.findByEmail(email);
 
             if (userExists) {
                 return res.status(401).json({ error: true, message: "Email in use" });
@@ -19,7 +22,7 @@ export class UserController {
 
             const hashPassword = await hash(password, 8);
 
-            const user = await prisma.user.create({ data: { name, email, password: hashPassword } });
+            const user = await userRepository.create({ name, email, password: hashPassword });
 
             return res.status(201).json(user);
         } catch (error) {
@@ -31,7 +34,7 @@ export class UserController {
         const { id } = req.user;
 
         try {
-            const user = await prisma.user.findUnique({ where: { id: Number(id) }, include: {event: true} });
+            const user = await prisma.user.findUnique({ where: { id: Number(id) }, include: { event: true } });
 
             if (!user) {
                 return res.status(400).json({ error: true, message: "User not found." })
