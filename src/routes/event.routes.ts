@@ -9,3 +9,4 @@ const eventController = new EventController();
 eventRouter.post('/', authMiddleware, eventController.create);
 eventRouter.get('/:id', eventController.read);
 eventRouter.put('/:id', authMiddleware,eventController.update);
+eventRouter.delete('/:id', authMiddleware,eventController.delete);

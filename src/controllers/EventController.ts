@@ -78,4 +78,22 @@ export class EventController {
             return res.status(500).json({ error: true, message: "Internal server error." });
         }
     }
+
+    async delete(req: Request, res: Response) {
+        const { id } = req.params;
+        const userId = req.user.id;
+
+        try {
+            await prisma.event.delete({
+                where: {
+                    id: Number(id),
+                    userId
+                }
+            });
+
+            return res.status(200).json({ message: "Event deleted." });
+        } catch (error) {
+            return res.status(500).json({ error: true, message: "Internal server error." })
+        }
+    }
 }
