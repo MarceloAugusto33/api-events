@@ -31,7 +31,7 @@ export class EventController {
 
         try {
             const event = await prisma.event.findUnique({
-                where: { 
+                where: {
                     id: Number(id),
                 },
                 include: {
@@ -50,6 +50,30 @@ export class EventController {
             }
 
             return res.status(200).json(event);
+        } catch (error) {
+            return res.status(500).json({ error: true, message: "Internal server error." });
+        }
+    }
+
+    async update(req: Request, res: Response) {
+        const { name, description, date } = req.body;
+        const { id } = req.params;
+        const userId = req.user.id;
+
+        try {
+            const event = await prisma.event.update({
+                where: {
+                    id: Number(id),
+                    userId
+                },
+                data: {
+                    name,
+                    description,
+                    date
+                }
+            });
+
+            return res.status(200).json(event)
         } catch (error) {
             return res.status(500).json({ error: true, message: "Internal server error." });
         }
