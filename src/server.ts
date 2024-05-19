@@ -10,8 +10,8 @@ export class Server {
     constructor() {
         this.server = express();
         this.port = Number(process.env.PORT) || 3000;
-        this.setMiddlewares()
-        this.setRoutes()
+        this.setMiddlewares();
+        this.setRoutes();
 
         this.server.listen(this.port, () => {
             console.log("Server running in port: " + this.port);

@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsnd --respawn --transpile-only --files ./src/app.ts",
-    "test": "jest"
+    "start": "tsnd --respawn --transpile-only --files ./src/app.ts",
+    "test": "jest",
+    "migrate": "npx prisma migrate dev --name create tables"
   },
   "keywords": [],
   "author": "",

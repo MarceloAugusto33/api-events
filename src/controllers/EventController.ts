@@ -55,6 +55,27 @@ export class EventController {
         }
     }
 
+    async readAll(req: Request, res: Response) {
+        const { page } = req.params;
+
+        const take = 5;
+        const skip = (Number(page) - 1) * take;
+
+        try {
+            const events = await prisma.event.findMany({
+                skip,
+                take,
+                orderBy: {
+                    createdAt: 'desc'
+                }
+            })
+
+            return res.status(200).json(events);
+        } catch (error) {
+            return res.status(500).json({ error: true, message: "Internal server error." });
+        }
+    }
+
     async update(req: Request, res: Response) {
         const { name, description, date } = req.body;
         const { id } = req.params;

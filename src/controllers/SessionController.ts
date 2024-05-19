@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { prisma } from "../database/prisma";
 import { compare } from "bcryptjs";
-import { sign, JwtPayload } from "jsonwebtoken";
+import { sign } from "jsonwebtoken";
 
 export class SessionController {
     async create(req: Request, res: Response) {
@@ -30,7 +30,7 @@ export class SessionController {
 
             return res.status(201).json({ user, token });
         } catch (error) {
-            return res.status(500).json({ error: true, message: "Internal server error" });
+            return res.status(500).json(error instanceof Error ? error.message : "Internal server error");
         }
     }
 }
